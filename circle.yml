@@ -12,7 +12,7 @@ general:
 
 dependencies:
   pre:
-    - sudo apt-get update ; sudo apt-get install libguestfs-tools
+    - sudo apt-get update ; sudo apt-get install libguestfs-tools libsys-virt-perl libguestfs-perl libwin-hivex-perl
     - docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
     - curl -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_VERSION}.gz
     
