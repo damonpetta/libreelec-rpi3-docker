@@ -1,0 +1,23 @@
+machine:
+  services:
+    - docker
+
+  environment:
+    LIBREELEC_VERSION: LibreELEC-RPi2.arm-7.0.1.img
+
+general:
+  branches:
+    only:
+      - master # only build/deploy from master
+
+dependencies:
+  pre:
+    - apt-get update ; apt-get install libguestfs-tools
+    - docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
+    - curl -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_VERSION}.gz
+    
+test:
+  override:
+    - guestfish --ro -a ${LIBREELEC_VERSION} -m /dev/sda1:/ tar-out / - | docker import - damonpetta/raspberrypi3-libreelec
+  post:
+    - docker push damonpetta/raspberrypi3-libreelec
