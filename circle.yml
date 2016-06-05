@@ -13,7 +13,8 @@ general:
 dependencies:
   pre:
     - sudo sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D
-    - sudo apt-get update ; sudo apt-get install libguestfs-tools libsys-virt-perl libguestfs-perl libwin-hivex-perl perlapi
+    - sudo apt-get update 
+    - sudo apt-get install libguestfs-tools libsys-virt-perl libguestfs-perl libwin-hivex-perl perl-base 
     - docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
     - curl -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_VERSION}.gz
     
