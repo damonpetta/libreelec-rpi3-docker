@@ -4,7 +4,7 @@ machine:
 
   environment:
     LIBREELEC_VERSION: 7.0.1
-    LIBREELEC_FILENAME: LibreELEC-RPi2.arm-${LIBREELEC_VERSION}.img
+    LIBREELEC_FILENAME: LibreELEC-RPi2.arm-${LIBREELEC_VERSION}.tar
 
 general:
   branches:
@@ -13,16 +13,16 @@ general:
 
 dependencies:
   pre:
-    - sudo sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D
-    - sudo apt-get update 
-    - sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq zfs-fuse
-    - sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq libguestfs-tools libsys-virt-perl libguestfs-perl libwin-hivex-perl perl-base zfs-fuse libguestfs0 libguestfs-perl libguestfs-tools
+    - #sudo sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F76221572C52609D
+    - #sudo apt-get update 
+    - #sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq zfs-fuse
+    - #sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq libguestfs-tools libsys-virt-perl libguestfs-perl libwin-hivex-perl perl-base zfs-fuse libguestfs0 libguestfs-perl libguestfs-tools
     - docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
-    - curl -sL -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_FILENAME}.gz
+    - curl -sL -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_FILENAME}
     
 test:
   override:
-    - guestfish --ro -a ${LIBREELEC_FILENAME} -m /dev/sda1:/ tar-out / - | docker import - damonpetta/raspberrypi3-libreelec
+    - cat ${LIBREELEC_FILENAME} | docker import - damonpetta/raspberrypi3-libreelec
   post:
     - docker push damonpetta/raspberrypi3-libreelec
 
