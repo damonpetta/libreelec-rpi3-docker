@@ -4,7 +4,7 @@ machine:
 
   environment:
     LIBREELEC_VERSION: 7.0.1
-    LIBREELEC_FILENAME: LibreELEC-RPi2.arm-${LIBREELEC_VERSION}.tar
+    LIBREELEC_FILENAME: LibreELEC-RPi2.arm-${LIBREELEC_VERSION}
 
 general:
   branches:
@@ -13,12 +13,17 @@ general:
 
 dependencies:
   pre:
+    - sudo apt-get install squashfs-tools
     - docker login -e ${DOCKER_EMAIL} -u ${DOCKER_USER} -p ${DOCKER_PASS}
-    - curl -sL -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_FILENAME}
+    - curl -sL -O http://libreelec.mirrors.uk2.net/releases/${LIBREELEC_FILENAME}.tar
+    - tar -xvf ${LIBREELEC_FILENAME}.tar
+    - cd /home/ubuntu/libreelec-rpi3-docker/${LIBREELEC_FILENAME}/target
+    - unsquashfs SYSTEM 
     
 test:
   override:
-    - cat ${LIBREELEC_FILENAME} | docker import - damonpetta/raspberrypi3-libreelec
+    - cd /home/ubuntu/libreelec-rpi3-docker/${LIBREELEC_FILENAME}/target/squashfs-root
+    - sudo tar -c . | docker import - damonpetta/raspberrypi3-libreelec
   post:
     - docker push damonpetta/raspberrypi3-libreelec
 
